@@ -28,7 +28,7 @@ const RegisterPage = () => {
     setError(null);
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError("Passwords don't match");
       return;
     }
 
@@ -59,11 +59,11 @@ const RegisterPage = () => {
         }
       }
 
-      setSuccess("Account created successfully! Redirecting to login...");
+      setSuccess("Account created! Redirecting you to login...");
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       setError(
-        err.response?.data?.message || "Registration failed. Please try again."
+        err.response?.data?.message || "Couldn't create account. Try again?"
       );
     } finally {
       setLoading(false);
@@ -89,7 +89,6 @@ const RegisterPage = () => {
             <div className="mb-4">
               <Alert
                 type="error"
-                title="Registration Failed"
                 message={error}
                 onClose={() => setError(null)}
               />
@@ -99,7 +98,6 @@ const RegisterPage = () => {
             <div className="mb-4">
               <Alert
                 type="success"
-                title="Success"
                 message={success}
                 onClose={() => setSuccess(null)}
               />

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { MapPin, DollarSign, Tag, Image } from "lucide-react";
 import { eventService } from "../services/eventService";
 import { Alert } from "../components/Alert";
 import ProtectedRoute from "../components/ProtectedRoute";
 
-const CreateEventPage = () => {
+const EditEventPage = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [loadingEvent, setLoadingEvent] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -20,6 +22,53 @@ const CreateEventPage = () => {
     price: 0,
     image: "",
   });
+
+  const fetchEvent = useCallback(async () => {
+    try {
+      setLoadingEvent(true);
+      const response = await eventService.getEvent(id);
+      const event = response.data?.data || response.data;
+      
+      if (event) {
+        // Format date for datetime-local input (YYYY-MM-DDTHH:mm)
+        let eventDate = "";
+        if (event.date) {
+          try {
+            const dateObj = new Date(event.date);
+            if (!isNaN(dateObj.getTime())) {
+              // Get local date/time in the correct format
+              const year = dateObj.getFullYear();
+              const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+              const day = String(dateObj.getDate()).padStart(2, "0");
+              const hours = String(dateObj.getHours()).padStart(2, "0");
+              const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+              eventDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+          } catch (e) {
+            console.error("Date parsing error:", e);
+          }
+        }
+        
+        setFormData({
+          title: event.title || "",
+          description: event.description || "",
+          location: event.location || "",
+          date: eventDate,
+          category: event.category || "conference",
+          price: event.price || 0,
+          image: event.image || "",
+        });
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Couldn't load event");
+    } finally {
+      setLoadingEvent(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchEvent();
+  }, [fetchEvent]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,13 +94,13 @@ const CreateEventPage = () => {
 
     try {
       setLoading(true);
-      await eventService.createEvent(formData);
-      setSuccess("Event created! Taking you back...");
+      await eventService.updateEvent(id, formData);
+      setSuccess("Event updated! Taking you back...");
       setTimeout(() => navigate("/my-events"), 1500);
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Couldn't create event. Try again?"
+          "Couldn't update event. Try again?"
       );
     } finally {
       setLoading(false);
@@ -66,6 +115,21 @@ const CreateEventPage = () => {
     "meetup",
   ];
 
+  if (loadingEvent) {
+    return (
+      <ProtectedRoute
+        element={
+          <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="text-center">
+              <p className="text-gray-600">Loading event...</p>
+            </div>
+          </div>
+        }
+        requiredRole="organizer"
+      />
+    );
+  }
+
   return (
     <ProtectedRoute
       element={
@@ -74,10 +138,10 @@ const CreateEventPage = () => {
           <div className="bg-white border-b border-gray-200">
             <div className="max-w-2xl mx-auto px-6 py-5">
               <h1 className="text-lg font-medium text-gray-900">
-                Create New Event
+                Edit Event
               </h1>
               <p className="text-sm text-gray-500 mt-0.5">
-                Launch your event and reach attendees
+                Update your event details
               </p>
             </div>
           </div>
@@ -232,7 +296,7 @@ const CreateEventPage = () => {
                   disabled={loading}
                   className="w-full py-2.5 bg-black hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                 >
-                  {loading ? "Creating Event..." : "Create Event"}
+                  {loading ? "Updating Event..." : "Update Event"}
                 </button>
               </div>
             </form>
@@ -244,4 +308,5 @@ const CreateEventPage = () => {
   );
 };
 
-export default CreateEventPage;
+export default EditEventPage;
+

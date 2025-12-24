@@ -24,7 +24,7 @@ const MyRegistrationsPage = () => {
       setRegistrations(response.data?.data || response.data || []);
     } catch (err) {
       setError(
-        err.response?.data?.message || "Failed to load your registrations"
+        err.response?.data?.message || "Couldn't load your registrations"
       );
       console.error(err);
     } finally {
@@ -38,10 +38,10 @@ const MyRegistrationsPage = () => {
     try {
       setCancelingId(registrationId);
       await registrationService.cancelRegistration(registrationId);
-      setSuccess("Registration cancelled successfully");
+      setSuccess("Registration cancelled");
       setRegistrations(registrations.filter((r) => r._id !== registrationId));
     } catch (err) {
-      setError("Failed to cancel registration");
+      setError("Couldn't cancel registration");
     } finally {
       setCancelingId(null);
     }
@@ -68,7 +68,6 @@ const MyRegistrationsPage = () => {
             {error && (
               <Alert
                 type="error"
-                title="Error"
                 message={error}
                 onClose={() => setError(null)}
               />
@@ -76,7 +75,6 @@ const MyRegistrationsPage = () => {
             {success && (
               <Alert
                 type="success"
-                title="Success"
                 message={success}
                 onClose={() => setSuccess(null)}
               />

@@ -24,7 +24,7 @@ const EventCard = ({
           </div>
         )}
         {event.status && (
-          <div className="absolute top-3 right-3">
+          <div className="absolute top-3 left-3">
             <span
               className={`text-xs font-semibold px-3 py-1 rounded-full ${
                 event.status === "approved"

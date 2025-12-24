@@ -33,18 +33,23 @@ const Navbar = () => {
               Browse Events
             </Link>
             {user?.role === "organizer" && (
-              <Link to="/create-event" className="btn-ghost">
-                Create Event
-              </Link>
+              <>
+                <Link to="/create-event" className="btn-ghost">
+                  Create Event
+                </Link>
+                <Link to="/my-events" className="btn-ghost">
+                  My Events
+                </Link>
+              </>
             )}
             {user?.role === "admin" && (
-              <Link to="/admin" className="btn-ghost">
-                Admin
+              <Link to="/admin/panel" className="btn-ghost">
+                Admin Panel
               </Link>
             )}
             {user && (
               <Link to="/my-registrations" className="btn-ghost">
-                My Events
+                My Registrations
               </Link>
             )}
           </div>
@@ -95,16 +100,24 @@ const Navbar = () => {
               Browse Events
             </Link>
             {user?.role === "organizer" && (
-              <Link
-                to="/create-event"
-                className="block btn-ghost w-full text-left"
-              >
-                Create Event
-              </Link>
+              <>
+                <Link
+                  to="/create-event"
+                  className="block btn-ghost w-full text-left"
+                >
+                  Create Event
+                </Link>
+                <Link
+                  to="/my-events"
+                  className="block btn-ghost w-full text-left"
+                >
+                  My Events
+                </Link>
+              </>
             )}
             {user?.role === "admin" && (
-              <Link to="/admin" className="block btn-ghost w-full text-left">
-                Admin
+              <Link to="/admin/panel" className="block btn-ghost w-full text-left">
+                Admin Panel
               </Link>
             )}
             {user && (
@@ -112,7 +125,7 @@ const Navbar = () => {
                 to="/my-registrations"
                 className="block btn-ghost w-full text-left"
               >
-                My Events
+                My Registrations
               </Link>
             )}
             {!user ? (

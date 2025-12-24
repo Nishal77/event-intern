@@ -15,6 +15,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import EventDetailPage from "./pages/EventDetailPage";
 import CreateEventPage from "./pages/CreateEventPage";
+import EditEventPage from "./pages/EditEventPage";
 import MyEventsPage from "./pages/MyEventsPage";
 import MyRegistrationsPage from "./pages/MyRegistrationsPage";
 import AdminPage from "./pages/AdminPage";
@@ -57,6 +58,15 @@ function App() {
               element={
                 <ProtectedRoute
                   element={<CreateEventPage />}
+                  requiredRole="organizer"
+                />
+              }
+            />
+            <Route
+              path="/edit-event/:id"
+              element={
+                <ProtectedRoute
+                  element={<EditEventPage />}
                   requiredRole="organizer"
                 />
               }

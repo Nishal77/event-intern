@@ -5,14 +5,15 @@ import Footer from "./Footer";
 
 /**
  * Layout component that conditionally shows Navbar/Footer
- * Hides them on admin routes
+ * Hides them on admin routes, login, and register pages
  */
 const Layout = ({ children }) => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
 
-  // Don't show Navbar/Footer on admin routes
-  if (isAdminRoute) {
+  // Don't show Navbar/Footer on admin routes or auth pages
+  if (isAdminRoute || isAuthPage) {
     return <>{children}</>;
   }
 

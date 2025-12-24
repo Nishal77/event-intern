@@ -27,7 +27,7 @@ const MyEventsPage = () => {
       setEvents(response.data?.data || response.data || []);
     } catch (err) {
       setError(
-        err.response?.data?.message || "Failed to load your events"
+        err.response?.data?.message || "Couldn't load your events"
       );
       console.error(err);
     } finally {
@@ -40,10 +40,10 @@ const MyEventsPage = () => {
 
     try {
       await eventService.deleteEvent(eventId);
-      setSuccess("Event deleted successfully");
+      setSuccess("Event deleted");
       setEvents(events.filter((e) => e._id !== eventId));
     } catch (err) {
-      setError("Failed to delete event");
+      setError("Couldn't delete event");
     }
   };
 
@@ -57,7 +57,7 @@ const MyEventsPage = () => {
       const data = response.data?.data || response.data || [];
       setRegistrations(data);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to load registrations");
+      setError(err.response?.data?.message || "Couldn't load registrations");
     } finally {
       setLoadingRegistrations(false);
     }
@@ -100,7 +100,6 @@ const MyEventsPage = () => {
             {error && (
               <Alert
                 type="error"
-                title="Error"
                 message={error}
                 onClose={() => setError(null)}
               />
@@ -108,7 +107,6 @@ const MyEventsPage = () => {
             {success && (
               <Alert
                 type="success"
-                title="Success"
                 message={success}
                 onClose={() => setSuccess(null)}
               />

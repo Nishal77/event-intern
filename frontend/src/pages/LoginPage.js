@@ -37,7 +37,7 @@ const LoginPage = () => {
         localStorage.setItem("adminEmail", user.email);
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
-        setSuccess("Admin login successful! Redirecting...");
+        setSuccess("Welcome! Taking you to admin dashboard...");
         setTimeout(() => {
           navigate("/admin/dashboard", { replace: true });
         }, 500);
@@ -46,12 +46,12 @@ const LoginPage = () => {
 
       // Regular user login
       login(user, token);
-      setSuccess("Login successful! Redirecting...");
+      setSuccess("Welcome back! Taking you home...");
       setTimeout(() => navigate("/home"), 1500);
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Login failed. Please check your credentials."
+          "Wrong email or password. Try again?"
       );
     } finally {
       setLoading(false);
@@ -76,7 +76,6 @@ const LoginPage = () => {
           {error && (
             <Alert
               type="error"
-              title="Login Failed"
               message={error}
               onClose={() => setError(null)}
             />
@@ -84,7 +83,6 @@ const LoginPage = () => {
           {success && (
             <Alert
               type="success"
-              title="Success"
               message={success}
               onClose={() => setSuccess(null)}
             />

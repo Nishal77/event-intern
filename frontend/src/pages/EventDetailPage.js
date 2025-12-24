@@ -40,7 +40,7 @@ const EventDetailPage = () => {
       }
     } catch (err) {
       setError(
-        err.response?.data?.message || "Failed to load event details"
+        err.response?.data?.message || "Couldn't load event details"
       );
       console.error(err);
     } finally {
@@ -57,11 +57,11 @@ const EventDetailPage = () => {
     try {
       setRegistering(true);
       await registrationService.registerForEvent(id);
-      setSuccess("Successfully registered for event!");
+      setSuccess("You're registered!");
       setIsRegistered(true);
     } catch (err) {
       setError(
-        err.response?.data?.message || "Failed to register. Please try again."
+        err.response?.data?.message || "Couldn't register. Try again?"
       );
     } finally {
       setRegistering(false);
@@ -111,7 +111,6 @@ const EventDetailPage = () => {
         {error && (
           <Alert
             type="error"
-            title="Error"
             message={error}
             onClose={() => setError(null)}
           />
@@ -119,7 +118,6 @@ const EventDetailPage = () => {
         {success && (
           <Alert
             type="success"
-            title="Success"
             message={success}
             onClose={() => setSuccess(null)}
           />
